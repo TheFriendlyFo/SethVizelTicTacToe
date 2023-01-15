@@ -1,21 +1,23 @@
 public class Tile {
+    private final int id;
     // static variable
-    public static final String BLANK = " ";
-
     // instance variable
     private String symbol;
-    private final int id;
 
     /**
      * Constructor; all Space objects start off with a blank symbol
      */
     public Tile(int id) {
         this.id = id;
-        symbol = BLANK;
+        symbol = String.valueOf(id);
     }
 
     public String getSymbol() {
-        return symbol.equals(BLANK) ? String.valueOf(id) : symbol;
+        return symbol;
+    }
+
+    public boolean isBlank() {
+        return symbol.equals(String.valueOf(id));
     }
 
     /**
@@ -26,10 +28,7 @@ public class Tile {
      * @return true if the space was successfully changed, return false otherwise
      */
     public boolean occupySpace(String symbolOfOccupant) {
-        if (symbol.equals(BLANK)) {
-            symbol = symbolOfOccupant;
-            return true;
-        }
-        return false;
+        symbol = symbolOfOccupant;
+        return true;
     }
 }

@@ -1,20 +1,22 @@
 import java.util.Scanner;
 
 public class TicTacToe {
-    private Player[] players;
-    private Board board;
+    private final Player[] players;
+    private final Board board;
 
     /**
      * Creates a player with the symbol X and a player with the symbol O
      * and initializes the players instance variable with the two players.
      * <p>
-     * Creates a new Board and assigns it to board, then draws game boad.
+     * Creates a new Board and assigns it to board, then draws game board.
      */
-    public TicTacToe() {
-        players = new Player[2];
-        players[0] = new Player("X");
-        players[1] = new Player("O");
-        board = new Board(3);
+    public TicTacToe(int numPlayers, int boardSize) {
+        players = new Player[numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            players[i] = new Player(i);
+        }
+        //players[2] = new Player(2);
+        board = new Board(boardSize);
 
         // draws the board as part of setup
         board.drawBoard();
@@ -34,8 +36,8 @@ public class TicTacToe {
             // each time through the while loop, iterate over the players array (2 players);
             // we add a break just in case the first player in array wins the game,
             // to prevent the next player from getting another turn
-            for (int i = 0; i < players.length; i++) {
-                if (takeTurn(players[i])) {
+            for (Player player : players) {
+                if (takeTurn(player)) {
                     gameOver = true;
                     break;  // breaks out of the for-loop -- NOT the while loop
                 }
@@ -53,7 +55,7 @@ public class TicTacToe {
      * If the board is full, print a message and return true.
      * Otherwise, the game is not yet over and return false.
      *
-     * @param p the player taking the turn.
+     * @param player the player taking the turn.
      * @return true if the GAME is over, false if the TURN is over but the game is not over
      */
     public boolean takeTurn(Player player) {
@@ -63,9 +65,11 @@ public class TicTacToe {
         // repeat until player selects a valid space, which occurs when recordMove returns true;
         // this occurs when the player has selected a numbered "blank" space.
         while (!selectedValidSpace) {
-            System.out.print("Player " + player.getSymbol() + "'s turn! Choose a space: ");
-            int chosenSpace = scanner.nextInt();
-            selectedValidSpace = board.recordMove(chosenSpace, player);
+            System.out.println("\nPlayer " + player.getSymbol() + "'s turn! Choose a space: ");
+            System.out.print("> ");
+
+            int chosenSpace = scanner.nextInt() - 1;
+            selectedValidSpace = board.recordMove(chosenSpace % board.getSize(), chosenSpace / board.getSize(), player);
         }
 
         // redraw the board, which will include the newly placed X or O as updated via recordMove
@@ -74,8 +78,8 @@ public class TicTacToe {
         // check to see if the board reveals a winning condition for either X or O
         String winner = board.checkWinner();
 
-        if (!winner.equals(Tile.BLANK)) {
-            System.out.println(winner + " won!");
+        if (winner != null) {
+            System.out.println("\n" + winner + "won!");
             return true;
         }
 
