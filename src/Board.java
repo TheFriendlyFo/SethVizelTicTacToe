@@ -1,7 +1,5 @@
 public class Board {
     private final Tile[][] tiles;
-    private final WinCondition[] winningConfigs;
-
     private final int size;
 
     /**
@@ -17,13 +15,6 @@ public class Board {
                 tiles[y][x] = new Tile(y * size + x + 1);
             }
         }
-
-        winningConfigs = new WinCondition[]{
-                new WinCondition(1, 1, size),
-                new WinCondition(1, 0, size),
-                new WinCondition(0, 1, size),
-                new WinCondition(new Point(1,0), new Point(1,1), new Point(0,1))
-        };
     }
 
     public boolean checkIdx(int xIdx, int yIdx) {
@@ -89,32 +80,6 @@ public class Board {
             return tiles[yIdx][xIdx].occupySpace(player.getSymbol());
         }
         return false;
-    }
-
-    /**
-     * Uses the checkConfiguration() method to determine whether there is a winner.
-     * By checking each of the various WinConditions into checkConfiguration,
-     * this method will know whether the game has been won, and if so, by who (X or O).
-     *
-     * @return if there IS a winning condition on the board, appropriates returns either "X" or "O",
-     * whichever the winning symbol is; if there is NO winning condition and no
-     * current winner, this method returns BLANK!
-     */
-    public String checkWinner() {
-        for (WinCondition config : winningConfigs) {
-            // if a player HAS achieved a particular win configuration on the board...
-            String winner = config.getWinner(this);
-
-            if (winner != null) {
-                // if the config is a winning condition, then all three Spaces
-                // making up that configuration have the same symbol (i.e. 3 X's in a row
-                // or 3 O's in a row), so arbitrarily choose the first int value
-                // in the array (index 0) to get the winning symbol
-
-                return winner;
-            }
-        }
-        return null;
     }
 
 

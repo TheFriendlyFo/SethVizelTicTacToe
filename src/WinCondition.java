@@ -14,6 +14,24 @@ public class WinCondition {
         }
     }
 
+    public static String checkAll(Board board){
+        WinCondition[] winningConfigs = new WinCondition[]{
+                new WinCondition(1, 1, board.getSize()),
+                new WinCondition(1, 0, board.getSize()),
+                new WinCondition(0, 1, board.getSize()),
+                new WinCondition(new Point(1,0), new Point(1,1), new Point(0,1))
+        };
+
+        for (WinCondition config : winningConfigs) {
+            String winner = config.getWinner(board);
+
+            if (winner != null) {
+                return winner;
+            }
+        }
+        return "";
+    }
+
     public WinCondition(Point... points) {
         this.points = points;
         xMax = 0;

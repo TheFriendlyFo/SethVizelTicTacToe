@@ -76,9 +76,9 @@ public class TicTacToe {
         board.drawBoard();
 
         // check to see if the board reveals a winning condition for either X or O
-        String winner = board.checkWinner();
+        String winner = WinCondition.checkAll(board);
 
-        if (winner != null) {
+        if (!winner.equals("")) {
             System.out.println("\n" + winner + "won!");
             return true;
         }
