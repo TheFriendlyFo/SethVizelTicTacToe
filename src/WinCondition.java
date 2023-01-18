@@ -46,8 +46,8 @@ public class WinCondition {
 
 
     public int getWinner(Board board) {
-        for (int y = -yMax; y < board.getSize() - yMax; y++) {
-            for (int x = -xMax; x < board.getSize() - xMax; x++) {
+        for (int y = -yMin; y < board.getSize() - yMax; y++) {
+            for (int x = -xMin; x < board.getSize() - xMax; x++) {
                 if (check(x, y, board)) {
                     return board.getSpace(x,y);
                 }
