@@ -28,35 +28,13 @@ public class Board {
     // getter method; note that there is
     // a parameter, which allows caller to specify
     // which specific Space (of the 9) to return
-    public String getSpace(int xIdx, int yIdx) {
+    public int getSpace(int xIdx, int yIdx) {
         if (checkIdx(xIdx, yIdx)) {
-            return tiles[yIdx][xIdx].getSymbol();
+            return tiles[yIdx][xIdx].getOwnerId();
         }
-        return null;
+        return -1;
     }
 
-    /**
-     * Draws the tic-tac-toe board so that the user can see what is happening.
-     * The empty board should look like this:
-     * <p>
-     * 1|2|3
-     * -----
-     * 4|5|6
-     * -----
-     * 7|8|9
-     * <p>
-     * As the players choose space numbers, those spaces will be filled in with Xs and Os.
-     * <p>
-     * O|2|3
-     * -----
-     * 4|X|6
-     * -----
-     * 7|8|9
-     * <p>
-     * This method goes through each space on the board and checks for BLANKS.
-     * If the space is BLANK, it prints the appropriate number.
-     * Otherwise, it prints the appropriate symbol.
-     */
     public void drawBoard() {
         System.out.println("\n}-------------------------------------------------------------------{\n");
         System.out.printf("}%s{\n", "-".repeat(2 + size * 5));
@@ -64,7 +42,7 @@ public class Board {
         for (Tile[] row : tiles) {
             System.out.print("}-");
             for (Tile tile : row) {
-                System.out.printf("{ %-2s}", tile.getSymbol());
+                System.out.printf("{ %-2s}", tile);
             }
 
             System.out.println("-{ ");
@@ -77,11 +55,14 @@ public class Board {
         // if user chooses a space between 1 and 9, try to occupy it, which updates
         // the symbol and returns true if the space is currently a numbered "blank" space
         if (checkIdx(xIdx, yIdx)) {
-            return tiles[yIdx][xIdx].occupySpace(player.getSymbol());
+            return tiles[yIdx][xIdx].occupySpace(player);
         }
         return false;
     }
 
+    public void undoMove(int x, int y) {
+        tiles[y][x].emptySpace();
+    }
 
     /**
      * Determines whether the board is full (has no BLANK spaces).

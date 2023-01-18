@@ -1,34 +1,36 @@
 public class Tile {
     private final int id;
-    // static variable
-    // instance variable
-    private String symbol;
+    private Player owner;
 
     /**
      * Constructor; all Space objects start off with a blank symbol
      */
     public Tile(int id) {
         this.id = id;
-        symbol = String.valueOf(id);
+        owner = null;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String toString() {
+        return isBlank() ? String.valueOf(id) : owner.toString();
     }
 
     public boolean isBlank() {
-        return symbol.equals(String.valueOf(id));
+        return owner == null;
     }
 
-    /**
-     * Changes the symbol on the space to symbolOfOccupant and returns true,
-     * but ONLY if it is currently BLANK.
-     *
-     * @param symbolOfOccupant the new symbol for the space.
-     * @return true if the space was successfully changed, return false otherwise
-     */
-    public boolean occupySpace(String symbolOfOccupant) {
-        symbol = symbolOfOccupant;
-        return true;
+    public boolean occupySpace(Player occupant) {
+        if (isBlank()) {
+            owner = occupant;
+            return true;
+        }
+        return false;
+    }
+
+    public void emptySpace() {
+        owner = null;
+    }
+
+    public int getOwnerId() {
+        return isBlank() ? -1 : owner.id();
     }
 }

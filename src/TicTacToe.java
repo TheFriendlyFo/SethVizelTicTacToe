@@ -59,27 +59,30 @@ public class TicTacToe {
      * @return true if the GAME is over, false if the TURN is over but the game is not over
      */
     public boolean takeTurn(Player player) {
-        Scanner scanner = new Scanner(System.in);
-        boolean selectedValidSpace = false;
+        if (player.id() != 1) {
+            Scanner scanner = new Scanner(System.in);
+            boolean selectedValidSpace = false;
 
-        // repeat until player selects a valid space, which occurs when recordMove returns true;
-        // this occurs when the player has selected a numbered "blank" space.
-        while (!selectedValidSpace) {
-            System.out.println("\nPlayer " + player.getSymbol() + "'s turn! Choose a space: ");
-            System.out.print("> ");
+            // repeat until player selects a valid space, which occurs when recordMove returns true;
+            // this occurs when the player has selected a numbered "blank" space.
+            while (!selectedValidSpace) {
+                System.out.println("\nPlayer " + player + "'s turn! Choose a space: ");
+                System.out.print("> ");
 
-            int chosenSpace = scanner.nextInt() - 1;
-            selectedValidSpace = board.recordMove(chosenSpace % board.getSize(), chosenSpace / board.getSize(), player);
+                int chosenSpace = scanner.nextInt() - 1;
+                selectedValidSpace = board.recordMove(chosenSpace % board.getSize(), chosenSpace / board.getSize(), player);
+            }
+        } else {
+            AI.placeBestMove(board,players, 1);
         }
-
         // redraw the board, which will include the newly placed X or O as updated via recordMove
         board.drawBoard();
 
         // check to see if the board reveals a winning condition for either X or O
-        String winner = WinCondition.checkAll(board);
+        int winner = WinCondition.checkAll(board);
 
-        if (!winner.equals("")) {
-            System.out.println("\n" + winner + "won!");
+        if (winner != -1) {
+            System.out.println("\n" + players[winner] + "won!");
             return true;
         }
 
