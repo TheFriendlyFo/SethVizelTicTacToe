@@ -31,7 +31,7 @@ public class WinCondition {
                 new WinCondition(1, 0, board.getSize()),
                 new WinCondition(0, 1, board.getSize()),
                 new WinCondition(-1, 1, board.getSize()),
-                new WinCondition(new Point(1,0), new Point(1,1), new Point(0,1))
+                //new WinCondition(new Point(1,0), new Point(1,1), new Point(0,1))
         };
 
         for (WinCondition config : winningConfigs) {
@@ -48,7 +48,7 @@ public class WinCondition {
     public int getWinner(Board board) {
         for (int y = -yMin; y < board.getSize() - yMax; y++) {
             for (int x = -xMin; x < board.getSize() - xMax; x++) {
-                if (check(x, y, board)) {
+                if (board.isFilled(x,y) && check(x, y, board)) {
                     return board.getSpace(x,y);
                 }
             }

@@ -1,20 +1,20 @@
-import java.util.Scanner;
-
 public class AI {
+    public static int reccursions = 0;
 
     public static void placeBestMove(Board board, Player[] players, int player){
         Point bestMove = null;
-        int best = 100;
+        int best = -100;
 
         for (int y = 0; y < board.getSize(); y++) {
             for (int x = 0; x < board.getSize(); x++) {
                 if (board.recordMove(x,y,players[player])) {
-                    int score = minimax(board, players, (player + 1) % players.length, 0);
-                    if (betterScore(score, best, player) == score) {
-                        if (score - player == 0 || score == -1) {
+                    int score = minimax(board, players, (player + 1) % players.length);
+
+                    if (score >= best) {
+                        if (score == 10) {
                             return;
                         }
-                        best = betterScore(best, score, player);
+                        best = score;
                         bestMove = new Point(x,y);
                     }
                     board.undoMove(x,y);
@@ -24,32 +24,33 @@ public class AI {
         board.recordMove(bestMove.x(), bestMove.y(), players[player]);
     }
 
-    private static int minimax(Board board, Player[] players, int turn, int depth) {
+    private static int minimax(Board board, Player[] players, int turn) {
+        reccursions++;
         int winner = WinCondition.checkAll(board);
 
         if (board.isFull() || winner != -1) {
-            return winner;
+            return winner == turn ? -10 :
+                    winner == Math.floorMod(turn - 1, players.length) ? 10 :
+                    winner == -1 ? 5 : 0;
         }
 
-        int best = 100;
+        int best = -100;
 
         for (int y = 0; y < board.getSize(); y++) {
             for (int x = 0; x < board.getSize(); x++) {
                 if (!board.recordMove(x,y,players[turn])) {
                     continue;
                 }
-                int score = minimax(board, players, (turn + 1) % players.length, depth + 1);
+                best = Math.max(best, minimax(board, players, (turn + 1) % players.length));
                 board.undoMove(x,y);
-                if (score - turn == 0 || score == -1) {
-                    return score;
+                if (best >= 10) {
+                    return -best;
                 }
-                best = betterScore(best, score, turn);
             }
         }
-        return best;
+        return -best;
     }
 
-    private static int betterScore(int score1, int score2, int playerNum) {
-        return Math.abs(playerNum - score1) < Math.abs(playerNum - score2) ? score1 : score2;
-    }
+
+
 }

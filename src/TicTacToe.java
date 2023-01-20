@@ -59,7 +59,7 @@ public class TicTacToe {
      * @return true if the GAME is over, false if the TURN is over but the game is not over
      */
     public boolean takeTurn(Player player) {
-        if (player.id() != 1) {
+        if (player.id() == -1) {
             Scanner scanner = new Scanner(System.in);
             boolean selectedValidSpace = false;
 
@@ -73,7 +73,7 @@ public class TicTacToe {
                 selectedValidSpace = board.recordMove(chosenSpace % board.getSize(), chosenSpace / board.getSize(), player);
             }
         } else {
-            AI.placeBestMove(board,players, 1);
+            AI.placeBestMove(board,players, player.id());
         }
         // redraw the board, which will include the newly placed X or O as updated via recordMove
         board.drawBoard();

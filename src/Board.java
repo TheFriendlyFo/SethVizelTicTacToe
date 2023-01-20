@@ -29,10 +29,7 @@ public class Board {
     // a parameter, which allows caller to specify
     // which specific Space (of the 9) to return
     public int getSpace(int xIdx, int yIdx) {
-        if (checkIdx(xIdx, yIdx)) {
-            return tiles[yIdx][xIdx].getOwnerId();
-        }
-        return -1;
+        return tiles[yIdx][xIdx].getOwnerId();
     }
 
     public void drawBoard() {
@@ -78,5 +75,9 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public boolean isFilled(int x, int y) {
+        return !tiles[y][x].isBlank();
     }
 }
