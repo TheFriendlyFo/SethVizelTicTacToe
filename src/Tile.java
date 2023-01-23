@@ -31,6 +31,8 @@ public class Tile {
      * @return whether the tile was successfully changed
      */
     public boolean occupySpace(Player occupant) {
+        // If statement is commented out to enable overwriting moves:
+
         if (isBlank()) {
             owner = occupant;
             return true;

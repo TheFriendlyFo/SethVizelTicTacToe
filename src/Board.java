@@ -18,7 +18,12 @@ public class Board {
             }
         }
 
-        configs = new WinCondition[]{new WinCondition(1, 1, size), new WinCondition(1, 0, size), new WinCondition(0, 1, size), new WinCondition(-1, 1, size), new WinCondition(new Point(1, 0), new Point(1, 1), new Point(0, 1))};
+        configs = new WinCondition[]{
+                new WinCondition(1, 1, 3),
+                new WinCondition(1, 0, 3),
+                new WinCondition(0, 1, 3),
+                new WinCondition(-1, 1, 3),
+                new WinCondition(new Point(1, 0), new Point(1, 1), new Point(0, 1))};
     }
 
 
@@ -54,12 +59,7 @@ public class Board {
 
 
     public boolean recordMove(int xIdx, int yIdx, Player player) {
-        // if user chooses a space between 1 and 9, try to occupy it, which updates
-        // the symbol and returns true if the space is currently a numbered "blank" space
-        if (getSpace(xIdx, yIdx) == -1) {
-            return tiles[yIdx][xIdx].occupySpace(player);
-        }
-        return false;
+        return tiles[yIdx][xIdx].occupySpace(player);
     }
 
     public void undoMove(int x, int y) {

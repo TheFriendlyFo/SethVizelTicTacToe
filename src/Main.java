@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        int aiDifficulty = 0;
 
         System.out.println("Enter number of players (1-6): ");
         System.out.print("> ");
@@ -12,9 +13,11 @@ public class Main {
         System.out.print("> ");
         int numAI = scanner.nextInt();
 
-        System.out.println("Enter AI complexity (1-5, higher difficulties may require more processing time):");
-        System.out.print("> ");
-        int aiDifficulty = scanner.nextInt();
+        if (numAI > 0) {
+            System.out.println("Enter AI complexity (1-5, higher complexities may require more processing time):");
+            System.out.print("> ");
+            aiDifficulty = scanner.nextInt();
+        }
 
         System.out.println("Enter board size (1-9): ");
         System.out.print("> ");

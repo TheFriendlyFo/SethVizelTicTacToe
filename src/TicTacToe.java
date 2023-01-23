@@ -14,8 +14,8 @@ public class TicTacToe {
      *                     roughly to its difficulty.
      */
     public TicTacToe(int numPlayers, int numAI, int boardSize, int aiDifficulty) {
-        players = new Player[numPlayers + numAI];
         this.aiDifficulty = aiDifficulty;
+        players = new Player[numPlayers + numAI];
 
         for (int i = 0; i < numPlayers; i++) {
             players[i] = new Player(i, false);
@@ -81,21 +81,23 @@ public class TicTacToe {
             }
             // If the player is an AI, process the next move using AI.placeBestMove.
         } else {
+            board.drawBoard();
             System.out.println("\nAI " + player + "is processing...");
             AI.placeBestMove(board, players, player.ID(), aiDifficulty);
         }
         // Draws the board for the next player, or the end of the game
-        board.drawBoard();
 
         // Determines the state of the board
         int winner = WinCondition.globalCheck(board);
 
         if (winner != -1) {
+            board.drawBoard();
             System.out.println("\n" + players[winner] + "won!");
             return true;
         }
 
         if (board.isFull()) {
+            board.drawBoard();
             System.out.println("The game is a tie!");
             return true;
         }
