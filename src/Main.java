@@ -12,7 +12,7 @@ public class Main {
         System.out.print("> ");
         int numAI = scanner.nextInt();
 
-        System.out.println("Enter the AI difficulty (1-5, higher difficulties may require more processing time):");
+        System.out.println("Enter AI complexity (1-5, higher difficulties may require more processing time):");
         System.out.print("> ");
         int aiDifficulty = scanner.nextInt();
 

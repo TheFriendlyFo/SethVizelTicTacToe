@@ -50,6 +50,6 @@ public class Tile {
      * @return the tile's owner's ID
      */
     public int getOwnerId() {
-        return isBlank() ? -1 : owner.id();
+        return isBlank() ? -1 : owner.ID();
     }
 }

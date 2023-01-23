@@ -1,14 +1,14 @@
 public class AI {
     public static int recursions = 0;
 
-    public static void placeBestMove(Board board, Player[] players, int player, int aiDifficulty) {
-        Point bestMove = null;
+    public static void placeBestMove(Board board, Player[] players, int playerID, int aiDifficulty) {
+        Point bestMove = new Point(0,0);
         int best = -1000;
 
         for (int y = 0; y < board.getSize(); y++) {
             for (int x = 0; x < board.getSize(); x++) {
-                if (board.recordMove(x, y, players[player])) {
-                    int score = minimax(board, players, (player + 1) % players.length, 1000 * (int) Math.pow(10, aiDifficulty));
+                if (board.recordMove(x, y, players[playerID])) {
+                    int score = minimax(board, players, (playerID + 1) % players.length, (int) (100 * Math.pow(10, aiDifficulty)));
                     recursions = 0;
                     if (score >= best) {
                         best = score;
@@ -18,7 +18,7 @@ public class AI {
                 }
             }
         }
-        board.recordMove(bestMove.x(), bestMove.y(), players[player]);
+        board.recordMove(bestMove.x(), bestMove.y(), players[playerID]);
     }
 
     private static int minimax(Board board, Player[] players, int turn, int aiDifficulty) {

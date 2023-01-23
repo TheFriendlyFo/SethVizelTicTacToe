@@ -82,7 +82,7 @@ public class TicTacToe {
             // If the player is an AI, process the next move using AI.placeBestMove.
         } else {
             System.out.println("\nAI " + player + "is processing...");
-            AI.placeBestMove(board, players, player.id(), aiDifficulty);
+            AI.placeBestMove(board, players, player.ID(), aiDifficulty);
         }
         // Draws the board for the next player, or the end of the game
         board.drawBoard();

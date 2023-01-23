@@ -51,11 +51,11 @@ public class WinCondition {
     }
 
     public static int globalEvaluation(Board board, int playerID) {
-        int evaluation = 0;
+        int evalScore = 0;
         for (WinCondition config : board.getConfigs()) {
-            evaluation += config.evaluateAll(board, playerID);
+            evalScore += config.evaluateAll(board, playerID);
         }
-        return evaluation;
+        return evalScore;
     }
 
     public int checkAll(Board board) {
@@ -80,30 +80,30 @@ public class WinCondition {
     }
 
     private int evaluateAll(Board board, int playerID) {
-        int evaluation = 0;
+        int evalScore = 0;
         for (int y = -yMin; y < board.getSize() - yMax; y++) {
             for (int x = -xMin; x < board.getSize() - xMax; x++) {
-                evaluation += evaluateOne(x, y, board, playerID);
+                evalScore += evaluateOne(x, y, board, playerID);
             }
         }
-        return evaluation;
+        return evalScore;
     }
 
     private int evaluateOne(int x, int y, Board board, int playerID) {
-        int owner = board.getSpace(x, y);
-        int evaluation = owner == -1 ? 0 : 1;
+        int evalID = board.getSpace(x, y);
+        int chainLength = evalID == -1 ? 0 : 1;
 
         for (Point point : points) {
             int compare = board.getSpace(x + point.x(), y + point.y());
-            if (owner == -1) {
-                owner = compare;
+            if (evalID == -1) {
+                evalID = compare;
             } else if (compare != -1) {
-                if (owner != compare) {
-                    return evaluation;
+                if (evalID != compare) {
+                    return chainLength;
                 }
-                evaluation++;
+                chainLength++;
             }
         }
-        return evaluation == 0 ? 0 : (owner == playerID ? 1 : -1) * ((int) Math.pow(3, evaluation));
+        return chainLength == 0 ? 0 : (evalID == playerID ? 1 : -1) * (int) Math.pow(3, chainLength);
     }
 }
