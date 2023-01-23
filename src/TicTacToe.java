@@ -3,29 +3,33 @@ import java.util.Scanner;
 public class TicTacToe {
     private final Player[] players;
     private final Board board;
+    private final int aiDifficulty;
 
     /**
-     * Creates a player with the symbol X and a player with the symbol O
-     * and initializes the players instance variable with the two players.
-     * <p>
-     * Creates a new Board and assigns it to board, then draws game board.
+     * Initializes a game of tictactoe, creating its board and players.
+     * @param numPlayers the number of non-AI players
+     * @param numAI the number of AI players
+     * @param boardSize the side length of the board
+     * @param aiDifficulty the amount of processing allowed to the AI, translating
+     *                     roughly to its difficulty.
      */
-    public TicTacToe(int numPlayers, int boardSize) {
-        players = new Player[numPlayers];
-        for (int i = 0; i < numPlayers; i++) {
-            players[i] = new Player(i);
-        }
-        //players[2] = new Player(2);
-        board = new Board(boardSize);
+    public TicTacToe(int numPlayers, int numAI, int boardSize, int aiDifficulty) {
+        players = new Player[numPlayers + numAI];
+        this.aiDifficulty = aiDifficulty;
 
-        // draws the board as part of setup
-        board.drawBoard();
+        for (int i = 0; i < numPlayers; i++) {
+            players[i] = new Player(i, false);
+        }
+        for (int i = numPlayers; i < players.length; i++) {
+            players[i] = new Player(i, true);
+        }
+
+        board = new Board(boardSize);
     }
 
     /**
-     * A loop will run the game until the board is full.
-     * Inside the loop, each player will take a turn, starting with p1/
-     * If either player's turn ends the game (the takeTurn() method returns true), break out of the loop.
+     * A loop will run the game until the takeTurn returns true, meaning game has ended.
+     * Every iteration, each player takes a turn placing a mark on the board.
      */
     public void runGame() {
         boolean gameOver = false;
@@ -48,9 +52,11 @@ public class TicTacToe {
 
     /**
      * Allows the current player to take a turn.
-     * Print a message saying whose turn it is: X or O
+     * Print a message saying whose turn it is
      * Draw the board for player reference.
+     * If the player is not an AI:
      * Allow the appropriate player to enter the space number they want to occupy and record the move.
+     * Otherwise, let the AI process its move and continue.
      * If the player has won the game, print a message and return true.
      * If the board is full, print a message and return true.
      * Otherwise, the game is not yet over and return false.
@@ -59,8 +65,9 @@ public class TicTacToe {
      * @return true if the GAME is over, false if the TURN is over but the game is not over
      */
     public boolean takeTurn(Player player) {
-        if (player.id() == -1) {
+        if (!player.isAI()) {
             Scanner scanner = new Scanner(System.in);
+            board.drawBoard();
             boolean selectedValidSpace = false;
 
             // repeat until player selects a valid space, which occurs when recordMove returns true;
@@ -72,14 +79,16 @@ public class TicTacToe {
                 int chosenSpace = scanner.nextInt() - 1;
                 selectedValidSpace = board.recordMove(chosenSpace % board.getSize(), chosenSpace / board.getSize(), player);
             }
+            // If the player is an AI, process the next move using AI.placeBestMove.
         } else {
-            AI.placeBestMove(board,players, player.id());
+            System.out.println("\nAI " + player + "is processing...");
+            AI.placeBestMove(board, players, player.id(), aiDifficulty);
         }
-        // redraw the board, which will include the newly placed X or O as updated via recordMove
+        // Draws the board for the next player, or the end of the game
         board.drawBoard();
 
-        // check to see if the board reveals a winning condition for either X or O
-        int winner = WinCondition.checkAll(board);
+        // Determines the state of the board
+        int winner = WinCondition.globalCheck(board);
 
         if (winner != -1) {
             System.out.println("\n" + players[winner] + "won!");

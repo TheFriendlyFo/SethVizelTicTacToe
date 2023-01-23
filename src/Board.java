@@ -1,4 +1,6 @@
 public class Board {
+
+    private final WinCondition[] configs;
     private final Tile[][] tiles;
     private final int size;
 
@@ -15,10 +17,13 @@ public class Board {
                 tiles[y][x] = new Tile(y * size + x + 1);
             }
         }
+
+        configs = new WinCondition[]{new WinCondition(1, 1, size), new WinCondition(1, 0, size), new WinCondition(0, 1, size), new WinCondition(-1, 1, size), new WinCondition(new Point(1, 0), new Point(1, 1), new Point(0, 1))};
     }
 
-    public boolean checkIdx(int xIdx, int yIdx) {
-        return 0 <= xIdx && xIdx < size && 0 <= yIdx && yIdx < size;
+
+    public WinCondition[] getConfigs() {
+        return configs;
     }
 
     public int getSize() {
@@ -51,7 +56,7 @@ public class Board {
     public boolean recordMove(int xIdx, int yIdx, Player player) {
         // if user chooses a space between 1 and 9, try to occupy it, which updates
         // the symbol and returns true if the space is currently a numbered "blank" space
-        if (checkIdx(xIdx, yIdx)) {
+        if (getSpace(xIdx, yIdx) == -1) {
             return tiles[yIdx][xIdx].occupySpace(player);
         }
         return false;
@@ -61,11 +66,6 @@ public class Board {
         tiles[y][x].emptySpace();
     }
 
-    /**
-     * Determines whether the board is full (has no BLANK spaces).
-     *
-     * @return True if there are no BLANKS in any spaces.
-     */
     public boolean isFull() {
         for (Tile[] row : tiles) {
             for (Tile column : row) {
@@ -75,9 +75,5 @@ public class Board {
             }
         }
         return true;
-    }
-
-    public boolean isFilled(int x, int y) {
-        return !tiles[y][x].isBlank();
     }
 }
