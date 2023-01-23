@@ -2,7 +2,7 @@ public class AI {
     public static int recursions = 0;
 
     public static void placeBestMove(Board board, Player[] players, int playerID, int aiDifficulty) {
-        Point bestMove = new Point(0,0);
+        int bestX = 0, bestY = 0;
         int best = -1000;
 
         for (int y = 0; y < board.getSize(); y++) {
@@ -12,13 +12,14 @@ public class AI {
                     recursions = 0;
                     if (score >= best) {
                         best = score;
-                        bestMove = new Point(x, y);
+                        bestX = x;
+                        bestY = y;
                     }
                     board.undoMove(x, y);
                 }
             }
         }
-        board.recordMove(bestMove.x(), bestMove.y(), players[playerID]);
+        board.recordMove(bestX, bestY, players[playerID]);
     }
 
     private static int minimax(Board board, Player[] players, int turn, int aiDifficulty) {
